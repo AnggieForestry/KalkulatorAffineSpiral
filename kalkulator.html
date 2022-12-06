@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<!-- Created By CodingNepal -->
+<html lang="en" dir="ltr">
+   <head>
+      <meta charset="utf-8">
+      <title>Kalkulator | Affine Cipher dan Spiral</title>
+      <link rel="stylesheet" href="style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+   </head>
+   <body>
+      <div class="container">
+         <header>Calculator</header>
+         <div class="progress-bar">
+            <div class="step">
+               <p style="font-size: 18px;">
+                Affine Cipher
+               </p>
+               <div class="bullet">
+                  <span>1</span>
+               </div>
+               <div class="check fas fa-check"></div>
+            </div>
+            <div class="step">
+               <p style="font-size: 18px;">
+                  Spiral
+               </p>
+               <div class="bullet">
+                  <span>2</span>
+               </div>
+               <div class="check fas fa-check"></div>
+            </div>
+         </div>
+
+         <div class="form-outer">
+            <form name="kalku" action="#">
+                <div class="page slide-page">
+                    <div class="field">
+                        <div style="color: #91769c;" class="label">
+                        Plaintext/Ciphertext
+                        </div>
+                        <input id="pt" name="p"  type="text" onkeyup="upperCase()">
+                    </div>
+                    <div class="field">
+                        <div style="color: #91769c;" class="label">
+                    Kunci a
+                        </div>
+                        <input id="a" type="text">
+                    </div>
+                    <div class="field">
+                        <div style="color: #91769c;"  class="label">
+                        Kunci b
+                        </div>
+                        <input id="b" type="text">
+                    </div>
+                    <div class="field">
+                        <div style="color: #91769c;" class="label">
+                        Opsi
+                        </div>
+                        <select class="box_opr" name="opt">
+                            <option value="Pilih Opsi">-- Pilih Opsi--</option>
+                            <option value="encrypt"> Enkripsi</option>
+                            <option value="decrypt"> Deskripsi</option>
+                        </select>
+                    </div>
+                    <div  >
+                        <input  type="button" value="=" class="but" name="btnEn" onClick="affineCipher()"> </input>
+                    </div> 
+                    <div class="field">
+                        <div style="color: #91769c;"  class="label">
+                        Hasil
+                        </div>
+                        <input id="hasil" name="c" class="box" readonly>
+                    </div>
+                    <div class="field">
+                        <button class="firstNext next">Next</button>
+                    </div>
+                </div>
+
+                <div class="page">
+                    <div class="field">
+                        <div class="label">
+                            Email Address
+                        </div>
+                        <input type="text">
+                    </div>
+                    <div class="field">
+                        <div class="label">
+                            Phone Number
+                        </div>
+                        <input type="Number">
+                    </div>
+                    <div class="field btns">
+                        <button class="prev-1 prev">Back</button>
+                        <!-- <button class="next-1 next">Next</button> -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    
+    <script>
+        function upperCase() {
+                var x = document.getElementById("pt");
+                x.value = x.value.toUpperCase(); 
+        }
+            
+        function modInverse(a, m) {
+            // validate inputs
+            [a, m] = [Number(a), Number(m)]
+            if (Number.isNaN(a) || Number.isNaN(m)) {
+                return NaN // invalid input
+            }
+            a = (a % m + m) % m
+            if (!a || m < 2) {
+                return NaN // invalid input
+            }
+            // find the gcd
+            const s = []
+            let b = m
+            while(b) {
+                [a, b] = [b, a % b]
+                s.push({a, b})
+            }
+            if (a !== 1) {
+                return NaN // inverse does not exists
+            }
+            // find the inverse
+            let x = 1
+            let y = 0
+            for(let i = s.length - 2; i >= 0; --i) {
+                [x, y] = [y,  x - y * Math.floor(s[i].a / s[i].b)]
+            }
+            return (y % m + m) % m
+        }
+
+
+        var affine = function(text,a,b,method){
+        let citext = "";
+        let alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let alpha_index= 0;
+        let inverse =0;
+
+        if(method === "Encode"){
+            for (let i = 0; i < text.length; i++){
+                for (let u =0; u < alpha.length; u++){
+                if(text[i] === alpha[u]){
+                    alpha_index = u;
+                    citext += alpha[(((a * alpha_index) + b) % 26)];
+
+                }else if (text[i] === alpha[u].toLowerCase()) {
+                    alpha_index = u;
+                    citext += alpha[(((a * alpha_index) + b) % 26)].toLowerCase();
+
+                }else if (text[i] == " ") {
+                    citext += " ";
+                    i++;
+                }
+                }
+            }
+            return citext;
+        }
+        else{
+
+            for (let i = 0; i < text.length; i++){
+            for (let u =0; u < alpha.length; u++){
+                if(text[i] === alpha[u]){
+                    alpha_index = u;
+                    citext += alpha[(((modInverse(a ,26) * (alpha_index - b)) % 26) < 0)? (26 - Math.abs((modInverse(a ,26) * (alpha_index - b)) % 26)): (((modInverse(a ,26) * (alpha_index - b)) % 26))];
+                }
+                else if (text[i] === alpha[u].toLowerCase()) {
+                    alpha_index = u;
+                    citext += alpha[(((modInverse(a ,26) * (alpha_index - b)) % 26) < 0)? (26 - Math.abs((modInverse(a ,26) * (alpha_index - b)) % 26)): (((modInverse(a ,26) * (alpha_index - b)) % 26))].toLowerCase();
+
+                }else if (text[i] == " ") {
+                    citext += " ";
+                    i++;
+                }
+            }
+            }
+            return citext;
+        }
+    }
+
+        
+        
+    
+        function affineCipher() {
+            const nilaiA = parseInt(document.getElementById("a").value);
+            const nilaiB = parseInt(document.getElementById("b").value);
+            var pil= document.kalku.opt.value;
+            if (pil == "encrypt") {
+                const nilaiA = parseInt(document.getElementById("a").value);
+                const nilaiB = parseInt(document.getElementById("b").value);
+                const plaintext = document.getElementById("pt").value;
+                const keys = { a: nilaiA, b: nilaiB };
+                let encodeHasil = affine(plaintext,nilaiA,nilaiB,"Encode");
+                document.getElementById("hasil").innerHTML = encodeHasil;
+                document.getElementById("hasil").value = encodeHasil;
+                console.log(nilaiA);
+                console.log(nilaiB);
+                console.log(encodeHasil); 
+            }else if (pil == "decrypt") {
+                const nilaiA = parseInt(document.getElementById("a").value);
+                const nilaiB = parseInt(document.getElementById("b").value);
+                const ciphertext = document.getElementById("pt").value;
+                const keys = { a: nilaiA, b: nilaiB };
+                let decodeHasil = affine(ciphertext,nilaiA,nilaiB,"Decode");
+                document.getElementById("hasil").innerHTML = decodeHasil;
+                document.getElementById("hasil").value = decodeHasil;
+                console.log(nilaiA);
+                console.log(nilaiB);
+                console.log(decodeHasil);
+            }
+
+            document.kalku.hasil.value = encodeHasil;
+            document.kalku.hasil.value = decodeHasil;
+        }
+      </script>
+   </body>
+</html>
