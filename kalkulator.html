@@ -75,23 +75,29 @@
                         <button class="firstNext next">Next</button>
                     </div>
                 </div>
-<!--SPIRAL-->
+
                 <div class="page">
                     <div class="field">
                         <div style="color: #91769c;" class="label">
-                            Plaintext/Ciphertext
+                        Plaintext/Ciphertext
                         </div>
-                        <input id="pt2" name="p"  type="text" onkeyup="upperCase()">
+                        <input id="plt"   type="text" onkeyup="upperCase()">
                     </div>
                     <div class="field">
                         <div style="color: #91769c;" class="label">
-                            Opsi
-                            </div>
-                            <select class="box_opr" name="opt">
-                                <option value="Pilih Opsi">-- Pilih Opsi--</option>
-                                <option value="encrypt"> Enkripsi</option>
-                                <option value="decrypt"> Deskripsi</option>
-                            </select>
+                    Ordo
+                        </div>
+                        <input id="o" type="text">
+                    </div>
+                    <div class="field">
+                        <div style="color: #91769c;" class="label">
+                        Opsi
+                        </div>
+                        <select class="box_opr" >
+                            <option value="Pilih Opsi">-- Pilih Opsi--</option>
+                            <option value="encryptSpiral"> Enkripsi</option>
+                            <option value="decryptSpiral"> Deskripsi</option>
+                        </select>
                     </div>
                     <div  >
                         <input  type="button" value="=" class="but" name="btnEn" onClick="spiral()"> </input>
@@ -100,7 +106,7 @@
                         <div style="color: #91769c;"  class="label">
                         Hasil
                         </div>
-                        <input id="hasil" name="c" class="box" readonly>
+                        <input id="hasilSpiral"  class="box" readonly>
                     </div>
                     <div class="field btns">
                         <button class="prev-1 prev">Back</button>
@@ -117,7 +123,7 @@
     
      <script>
         function upperCase() {
-                var x = document.getElementById("pt"&&"pt2");
+                var x = document.getElementById("pt");
                 x.value = x.value.toUpperCase(); 
         }
             
@@ -197,10 +203,6 @@
             return citext;
         }
     }
-
-        
-        
-    
         function affineCipher() {
             const nilaiA = parseInt(document.getElementById("a").value);
             const nilaiB = parseInt(document.getElementById("b").value);
@@ -232,8 +234,36 @@
             document.kalku.hasil.value = encodeHasil;
             document.kalku.hasil.value = decodeHasil;
         }
-    </script> 
 
+
+        
+        function spiral() {
+        const nilaiO = parseInt(document.getElementById("o").value);
+        var pil= document.kalku.opt.value;
+        var bebas;
+        if (pil == "encryptSpiral") {
+            // const nilaiO = parseInt(document.getElementById("o").value);
+            // const plaintext = document.getElementById("plt").value;
+            // const keys = { o: nilaiO};
+            // let encodeSpiral = encrypt(plaintext,nilaiO,hasil);
+            // bebas = encodeSpiral;
+            document.getElementById("hasilSpiral").innerHTML = "hallo";
+            document.getElementById("hasilSpiral").value = "encodeSpiral";
+            // apa = 1;
+            // console.log(nilaiO);
+            // console.log(encodeSpiral); 
+
+
+        }else if (pil == "decrypt") {
+
+        }
+
+        document.kalku.hasil.value = bebas;
+
+        // document.kalku.hasil.value = decodeHasil;
+        }
+        
+    </script>
     <script>
     function orde (text) {
         let hasil = 0;
@@ -265,6 +295,32 @@
         return arrpad;
     }
 
+    
+
+    // ------------------------------------------------------------
+
+
+    // export function shiftEncrypt (text, s) {
+    //     let result=""
+    //     let text2 = encryptPadding(text, cek(text));
+    //     for (let i = 0; i < text2.length; i++) {
+    //         let char = text2[i];
+    //         if (char == ' ') {
+    //             result += '_';
+    //         } else if (char.toUpperCase(text2[i])) {
+    //             let ch =  String.fromCharCode((char.charCodeAt(0) + s-65) % 26 + 65);
+    //             result += ch;
+    //         } else {
+    //             let ch = String.fromCharCode((char.charCodeAt(0) + s-97) % 26 + 97);
+    //             result += ch;
+    //         }
+    //     }
+    //     return result;
+    // }
+
+
+    // ------------------------------------------------------------
+    
     function spiralEncrypt (arr, mat) {
         const O = orde(arr);
         let top = 0,
@@ -346,6 +402,30 @@
         let hasil = printSpiralEncrypt(arr, mat);
         return hasil;
     }
+
+
+    // ------------------------------------------
+
+
+    // export function shiftDecrypt (text, s) {
+    //     let result=""
+    //     for (let i = 0; i < text.length; i++) {
+    //         let char = text[i];
+    //         if (char == '_' || char == ' ') {
+    //             result += '_';
+    //         } else if (char.toUpperCase(text[i])) {
+    //             let ch =  String.fromCharCode((char.charCodeAt(0) + (26-s)-65) % 26 + 65);
+    //             result += ch;
+    //         } else {
+    //             let ch = String.fromCharCode((char.charCodeAt(0) + (26-s)-97) % 26 + 97);
+    //             result += ch;
+    //         }
+    //     }
+    //     return result;
+    // }
+
+
+    // ----------------------------------------------------
 
     export function spiralDecrypt (m, n, arr) {
         let i, k = 0, l = 0;
@@ -430,34 +510,7 @@
         return hasil;
     }
 
-    function spiral() {
-        const nilaiO = parseInt(document.getElementById("o").value);
-        var pil= document.kalku.opt.value;
-        if (pil == "encrypt") {
-            const nilaiO = parseInt(document.getElementById("o").value);
-            const plaintext = document.getElementById("pt2").value;
-            const keys = { o: nilaiO};
-            let encodeHasil = encrypt(plaintext,nilaiO,hasil);
-            document.getElementById("hasil").innerHTML = encodeHasil;
-            document.getElementById("hasil").value = encodeHasil;
-            console.log(nilaiO);
-            console.log(encodeHasil); 
-
-
-        }else if (pil == "decrypt") {
-            const nilaiO = parseInt(document.getElementById("o").value);
-            const ciphertext = document.getElementById("pt2").value;
-            const keys = { o: nilaiO };
-            let decodeHasil = decrypt(plaintext,nilaiO,hasil);
-            document.getElementById("hasil").innerHTML = decodeHasil;
-            document.getElementById("hasil").value = decodeHasil;
-            console.log(nilaiO);
-            console.log(decodeHasil);
-        }
-
-        document.kalku.hasil.value = encodeHasil;
-        document.kalku.hasil.value = decodeHasil;
-    }
+    
     </script> 
    </body>
 </html>
